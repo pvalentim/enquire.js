@@ -74,16 +74,6 @@
 			expect(splice.calls.length).toBe(1); // splice called just once
 		});
 
-		it('can be short-circuited with isUnconditional flag', function() {
-			// Arrange
-			mq.isUnconditional = true;
-
-			// Act
-			mq.addHandler(handler);
-
-			// Assert
-			expect(mq.matches()).toBe(true);
-		});
 
 		it('destroys all handlers and removes listener when cleared', function() {
 			// Arrange
@@ -105,13 +95,9 @@
 			expect(mq.handlers.length).toBe(0);
 		});
 
-		it('will consider a match if unconditional flag set or if media query matches', function() {
+		it('will consider a match if media query matches', function() {
 			// Arrange
-			var unconditionalMatch,
-				mediaQueryMatch;
-
-			mq.isUnconditional = true;
-			unconditionalMatch = mq.matches();
+			var mediaQueryMatch;
 
 			mq.isUnconditional = false;
 			mq.mql = { matches : true };
@@ -119,7 +105,6 @@
 			mediaQueryMatch = mq.matches();
 
 			// Assert
-			expect(unconditionalMatch).toBe(true);
 			expect(mediaQueryMatch).toBe(true);
 		});
 

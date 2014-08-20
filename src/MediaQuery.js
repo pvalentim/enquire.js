@@ -29,16 +29,17 @@
          * @param {function} [handler.setup] callback for immediate execution when a query handler is registered
          * @param {boolean} [handler.deferSetup=false] should the setup callback be deferred until the first time the handler is matched?
          */
-        addHandler : function(handler) {
+        addHandler : function(handler, isUnconditional) {
+            handler.isUnconditional = isUnconditional;
             var qh = new QueryHandler(handler);
             this.handlers.push(qh);
 
-            this.matches() && qh.on();
+            (this.matches() || isUnconditional) && qh.on();
         },
 
         /**
          * removes the given handler from the collection, and calls it's destroy methods
-         * 
+         *
          * @param {object || function} handler the handler to remove
          */
         removeHandler : function(handler) {
@@ -53,11 +54,11 @@
 
         /**
          * Determine whether the media query should be considered a match
-         * 
+         *
          * @return {Boolean} true if media query can be considered a match, false otherwise
          */
         matches : function() {
-            return this.mql.matches || this.isUnconditional;
+            return this.mql.matches;
         },
 
         /**
@@ -78,6 +79,9 @@
             var action = this.matches() ? 'on' : 'off';
 
             each(this.handlers, function(handler) {
+                if (handler.isUnconditional) {
+                    return handler.on();
+                }
                 handler[action]();
             });
         }

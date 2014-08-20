@@ -45,7 +45,7 @@
                 if (isFunction(handler)) {
                     handler = { match : handler };
                 }
-                queries[q].addHandler(handler);
+                queries[q].addHandler(handler, isUnconditional);
             });
 
             return this;
